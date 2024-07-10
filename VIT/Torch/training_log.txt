@@ -1,0 +1,20 @@
+Epoch 1/5
+Train Loss: 3.2431, Train Accuracy: 25.48%
+Validation Loss: 2.3298, Validation Accuracy: 54.97%
+
+Epoch 2/5
+Train Loss: 1.2238, Train Accuracy: 83.47%
+Validation Loss: 0.9356, Validation Accuracy: 84.99%
+
+Epoch 3/5
+Train Loss: 0.3692, Train Accuracy: 96.35%
+Validation Loss: 0.5683, Validation Accuracy: 89.62%
+
+Epoch 4/5
+Train Loss: 0.1418, Train Accuracy: 99.28%
+Validation Loss: 0.4597, Validation Accuracy: 89.85%
+
+Epoch 5/5
+Train Loss: 0.0754, Train Accuracy: 99.56%
+Validation Loss: 0.4134, Validation Accuracy: 90.51%
+

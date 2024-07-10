@@ -97,6 +97,8 @@ def preprocess_image(image_path, transform):
     return image
 
 num_epochs = 5
+log_file = open('training_log.txt', 'w')
+
 for epoch in range(num_epochs):
     train_loss, train_accuracy = train(model, train_loader, optimizer, criterion, device)
     val_loss, val_accuracy = validate(model, test_loader, criterion, device)
@@ -104,6 +106,13 @@ for epoch in range(num_epochs):
     print(f"Epoch {epoch+1}/{num_epochs}")
     print(f"Train Loss: {train_loss:.4f}, Train Accuracy: {train_accuracy:.2f}%")
     print(f"Validation Loss: {val_loss:.4f}, Validation Accuracy: {val_accuracy:.2f}%")
+    
+    log_file.write(f"Epoch {epoch+1}/{num_epochs}\n")
+    log_file.write(f"Train Loss: {train_loss:.4f}, Train Accuracy: {train_accuracy:.2f}%\n")
+    log_file.write(f"Validation Loss: {val_loss:.4f}, Validation Accuracy: {val_accuracy:.2f}%\n")
+    log_file.write("\n")
+    
+log_file.close()
 
 # testing the model on the test dataset
 test_loss, test_accuracy = validate(model, test_loader, criterion, device)
