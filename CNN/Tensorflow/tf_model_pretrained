@@ -1,0 +1,97 @@
+import os
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Flatten, Dense, Dropout
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from tensorflow.keras.applications import VGG16
+from tensorflow.keras.optimizers import Adam
+from sklearn.utils.class_weight import compute_class_weight
+import matplotlib.pyplot as plt
+
+data_dir = 'Datasets/Edited' 
+img_height, img_width = 150, 150
+batch_size = 16
+epochs = 20
+
+# Prepare Data
+datagen = ImageDataGenerator(
+    rescale=1./255,
+    validation_split=0.2,  
+    horizontal_flip=True,
+    vertical_flip=True,
+    rotation_range=30,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    shear_range=0.2,
+    zoom_range=0.2
+)
+
+# Load training and validation data
+train_generator = datagen.flow_from_directory(
+    data_dir,
+    target_size=(img_height, img_width),
+    batch_size=batch_size,
+    class_mode='binary',
+    subset='training'
+)
+
+validation_generator = datagen.flow_from_directory(
+    data_dir,
+    target_size=(img_height, img_width),
+    batch_size=batch_size,
+    class_mode='binary',
+    subset='validation'
+)
+
+# Data pipeline
+for images, labels in train_generator:
+    for i in range(9):
+        plt.subplot(330 + 1 + i)
+        plt.imshow(images[i])
+        plt.title(f'Label: {labels[i]}')
+    plt.show()
+    break
+
+# Calculate class weights
+classes = train_generator.classes
+class_weights = compute_class_weight(class_weight='balanced', classes=np.unique(classes), y=classes)
+class_weights = dict(enumerate(class_weights))
+
+# Pre-trained VGG16 Model
+base_model = VGG16(input_shape=(img_height, img_width, 3), include_top=False, weights='imagenet')
+base_model.trainable = False
+
+model = Sequential([
+    base_model,
+    Flatten(),
+    Dense(512, activation='relu'),
+    Dropout(0.5),
+    Dense(1, activation='sigmoid')
+])
+
+# Compiling
+model.compile(optimizer=Adam(learning_rate=1e-4), loss='binary_crossentropy', metrics=['accuracy'])
+
+# Callbacks
+early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
+model_checkpoint = ModelCheckpoint('pretrained_checkpoint.h5', save_best_only=True, monitor='val_loss')
+
+# Training
+history = model.fit(
+    train_generator,
+    steps_per_epoch=train_generator.samples // batch_size,
+    validation_data=validation_generator,
+    validation_steps=validation_generator.samples // batch_size,
+    epochs=epochs,
+    callbacks=[early_stopping, model_checkpoint],
+    class_weight=class_weights
+)
+
+# Evaluating
+loss, accuracy = model.evaluate(validation_generator)
+print(f'Validation accuracy: {accuracy * 100:.2f}%')
+
+# Saving
+model.save('cnn_pretrained.h5')
