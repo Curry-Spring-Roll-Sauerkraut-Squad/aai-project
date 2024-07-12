@@ -12,16 +12,16 @@ The dataset contains 2,700 + images classified into 47 categories.
 
 ### Cleaned Dataset
 
-Thanks to Lukas’ work, some obvious outliers that were classified into the wrong category were removed.
+Thanks to Lukas’s work, some obvious outliers that were classified into the wrong category were removed.
 Then we get a cleaner dataset with 2300+ images and 47 classes.
 
 ## Approach
 
 Approach Introduction(todo)
 
-### CNN
+### 1. CNN
 
-### Train ViT From Scrach
+### 2. Train ViT From Scrach
 
 ### 3. ViT Based Fine Tuning
 
