@@ -4,16 +4,17 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Flatten, Dense, Dropout
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.optimizers import Adam
 from sklearn.utils.class_weight import compute_class_weight
 import matplotlib.pyplot as plt
+from PIL import Image
 
 data_dir = 'Datasets/Edited' 
 img_height, img_width = 150, 150
 batch_size = 16
-epochs = 100 # Increased
+epochs = 100
 
 # Prepare Data
 datagen = ImageDataGenerator(
@@ -33,7 +34,7 @@ train_generator = datagen.flow_from_directory(
     data_dir,
     target_size=(img_height, img_width),
     batch_size=batch_size,
-    class_mode='categorical',  # Categorical
+    class_mode='categorical',
     subset='training'
 )
 
@@ -41,11 +42,11 @@ validation_generator = datagen.flow_from_directory(
     data_dir,
     target_size=(img_height, img_width),
     batch_size=batch_size,
-    class_mode='categorical',  # Categorical
+    class_mode='categorical',
     subset='validation'
 )
 
-# Data pipeline visualization
+# Display sample images and their labels from training data
 for images, labels in train_generator:
     for i in range(9):
         plt.subplot(330 + 1 + i)
@@ -68,31 +69,57 @@ model = Sequential([
     Flatten(),
     Dense(512, activation='relu'),
     Dropout(0.5),
-    Dense(47, activation='softmax')  # Added Softmax, 47 units
+    Dense(47, activation='sigmoid')
 ])
 
-# Compiling
-model.compile(optimizer=Adam(learning_rate=1e-5), loss='categorical_crossentropy', metrics=['accuracy'])  # Adjusted learning rate and loss
+# Compiling the model
+model.compile(optimizer=Adam(learning_rate=1e-4), loss='binary_crossentropy', metrics=['accuracy'])
 
 # Callbacks
-early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
-reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, min_lr=1e-6)
-model_checkpoint = ModelCheckpoint('imbal_checkpoint.keras', save_best_only=True, monitor='val_loss')
+early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
+model_checkpoint = ModelCheckpoint('vgg16_checkpoint.keras', save_best_only=True, monitor='val_loss')
 
-# Training
+# Training the model with tf.data.Dataset for repetition
+train_ds = tf.data.Dataset.from_generator(
+    lambda: train_generator,
+    output_types=(tf.float32, tf.float32),
+    output_shapes=([None, img_height, img_width, 3], [None, 47])
+).repeat()
+
+val_ds = tf.data.Dataset.from_generator(
+    lambda: validation_generator,
+    output_types=(tf.float32, tf.float32),
+    output_shapes=([None, img_height, img_width, 3], [None, 47])
+).repeat()
+
 history = model.fit(
-    train_generator,
+    train_ds,
     steps_per_epoch=train_generator.samples // batch_size,
-    validation_data=validation_generator,
+    validation_data=val_ds,
     validation_steps=validation_generator.samples // batch_size,
     epochs=epochs,
-    callbacks=[early_stopping, reduce_lr, model_checkpoint],
+    callbacks=[early_stopping, model_checkpoint],
     class_weight=class_weights
 )
 
-# Evaluating
-loss, accuracy = model.evaluate(validation_generator)
+# Evaluating the model
+loss, accuracy = model.evaluate(val_ds, steps=validation_generator.samples // batch_size)
 print(f'Validation accuracy: {accuracy * 100:.2f}%')
 
-# Saving
-model.save('cnn_pretrained_imbal.h5')
+# Saving the model in native Keras format
+model.save('cnn_vgg16.keras')
+
+# Additional changes and fixes
+for root, dirs, files in os.walk(data_dir):
+    for file in files:
+        if file.endswith(('png', 'jpg', 'jpeg')):
+            img_path = os.path.join(root, file)
+            img = Image.open(img_path)
+            if img.mode == 'P':
+                img = img.convert('RGBA')
+                img.save(img_path)
+
+# Output the current accuracy
+print(f'Current accuracy: {accuracy * 100:.2f}%')
+
+# Current ACC: 60%

@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 data_dir = 'Datasets/Edited' 
 img_height, img_width = 150, 150
 batch_size = 16
-epochs = 20
+epochs = 100
 
 # Prepare Data
 datagen = ImageDataGenerator(
@@ -33,7 +33,7 @@ train_generator = datagen.flow_from_directory(
     data_dir,
     target_size=(img_height, img_width),
     batch_size=batch_size,
-    class_mode='binary',
+    class_mode='categorical',
     subset='training'
 )
 
@@ -41,7 +41,7 @@ validation_generator = datagen.flow_from_directory(
     data_dir,
     target_size=(img_height, img_width),
     batch_size=batch_size,
-    class_mode='binary',
+    class_mode='categorical',
     subset='validation'
 )
 
@@ -50,7 +50,7 @@ for images, labels in train_generator:
     for i in range(9):
         plt.subplot(330 + 1 + i)
         plt.imshow(images[i])
-        plt.title(f'Label: {labels[i]}')
+        plt.title(f'Label: {np.argmax(labels[i])}')
     plt.show()
     break
 
@@ -68,7 +68,7 @@ model = Sequential([
     Flatten(),
     Dense(512, activation='relu'),
     Dropout(0.5),
-    Dense(1, activation='sigmoid')
+    Dense(47, activation='sigmoid')
 ])
 
 # Compiling
@@ -76,7 +76,8 @@ model.compile(optimizer=Adam(learning_rate=1e-4), loss='binary_crossentropy', me
 
 # Callbacks
 early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
-model_checkpoint = ModelCheckpoint('pretrained_checkpoint.h5', save_best_only=True, monitor='val_loss')
+#reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, min_lr=1e-6)
+model_checkpoint = ModelCheckpoint('vgg16_checkpoint.keras', save_best_only=True, monitor='val_loss')
 
 # Training
 history = model.fit(
@@ -94,4 +95,6 @@ loss, accuracy = model.evaluate(validation_generator)
 print(f'Validation accuracy: {accuracy * 100:.2f}%')
 
 # Saving
-model.save('cnn_pretrained.h5')
+model.save('cnn_vgg16.h5')
+
+# CURRENT ACC: 50 %

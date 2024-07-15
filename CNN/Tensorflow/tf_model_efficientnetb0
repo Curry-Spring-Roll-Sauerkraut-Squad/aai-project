@@ -1,0 +1,101 @@
+import os
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Flatten, Dense, Dropout
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from tensorflow.keras.applications import EfficientNetB3
+from tensorflow.keras.optimizers import Adam
+from sklearn.utils.class_weight import compute_class_weight
+import matplotlib.pyplot as plt
+from PIL import Image
+
+data_dir = 'Datasets/Edited'
+img_height, img_width = 300, 300
+batch_size = 32
+epochs = 100
+
+# Prepare Data
+datagen = ImageDataGenerator(
+    rescale=1./255,
+    validation_split=0.2,
+    horizontal_flip=True,
+    vertical_flip=True,
+    rotation_range=45,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    shear_range=0.2,
+    zoom_range=0.2
+)
+
+# Load training and validation data
+train_generator = datagen.flow_from_directory(
+    data_dir,
+    target_size=(img_height, img_width),
+    batch_size=batch_size,
+    class_mode='categorical',
+    subset='training'
+)
+
+validation_generator = datagen.flow_from_directory(
+    data_dir,
+    target_size=(img_height, img_width),
+    batch_size=batch_size,
+    class_mode='categorical',
+    subset='validation'
+)
+
+# Pre-trained EfficientNetB3 Model
+base_model = EfficientNetB3(input_shape=(img_height, img_width, 3), include_top=False, weights='imagenet')
+base_model.trainable = False
+
+model = Sequential([
+    base_model,
+    Flatten(),
+    Dense(512, activation='relu'),
+    Dropout(0.5),
+    Dense(train_generator.num_classes, activation='softmax')
+])
+
+# Compiling the model
+model.compile(optimizer=Adam(learning_rate=1e-4), loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Callbacks
+early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+model_checkpoint = ModelCheckpoint('efficientnetb3_checkpoint.keras', save_best_only=True, monitor='val_loss')
+
+# Training the model with tf.data.Dataset for repetition
+train_ds = tf.data.Dataset.from_generator(
+    lambda: train_generator,
+    output_types=(tf.float32, tf.float32),
+    output_shapes=([None, img_height, img_width, 3], [None, train_generator.num_classes])
+).repeat()
+
+val_ds = tf.data.Dataset.from_generator(
+    lambda: validation_generator,
+    output_types=(tf.float32, tf.float32),
+    output_shapes=([None, img_height, img_width, 3], [None, validation_generator.num_classes])
+).repeat()
+
+history = model.fit(
+    train_ds,
+    steps_per_epoch=train_generator.samples // batch_size,
+    validation_data=val_ds,
+    validation_steps=validation_generator.samples // batch_size,
+    epochs=epochs,
+    callbacks=[early_stopping, model_checkpoint],
+    verbose=1
+)
+
+# Evaluating the model
+loss, accuracy = model.evaluate(validation_generator)
+print(f'Validation accuracy: {accuracy * 100:.2f}%')
+
+# Saving in .keras
+model.save('cnn_efficientnetb3.keras')
+
+# Output accuracy
+print(f'Current accuracy: {accuracy * 100:.2f}%')
+
+# Current ACC: 

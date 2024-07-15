@@ -77,3 +77,5 @@ print(f'Validation accuracy: {accuracy * 100:.2f}%')
 
 # Saving
 model.save('cnn_trained.h5')
+
+# CURRENT ACC: -
