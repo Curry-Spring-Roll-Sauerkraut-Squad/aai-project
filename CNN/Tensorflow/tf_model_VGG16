@@ -8,14 +8,17 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.keras.optimizers import Adam
 from sklearn.utils.class_weight import compute_class_weight
 
+# Old Dataset
+# data_dir = 'Datasets/Edited'
 # New Dataset
 data_dir = 'Dataset/Edited_Enhanced'
 
+# Image Parameters
 img_height, img_width = 150, 150
 batch_size = 32
 epochs = 100
 
-# Prepare Data
+# Image Data Preparations and Adaption
 datagen = ImageDataGenerator(
     rescale=1./255,
     validation_split=0.2,
@@ -28,7 +31,7 @@ datagen = ImageDataGenerator(
     zoom_range=0.1
 )
 
-# Load train and validation data
+# Loading Training and Validation Data
 train_generator = datagen.flow_from_directory(
     data_dir,
     target_size=(img_height, img_width),
@@ -45,7 +48,7 @@ validation_generator = datagen.flow_from_directory(
     subset='validation'
 )
 
-# Compute class weights
+# Class Weight Computation
 class_weights = compute_class_weight(
     class_weight='balanced',
     classes=np.unique(train_generator.classes),
@@ -53,24 +56,26 @@ class_weights = compute_class_weight(
 )
 class_weights = dict(enumerate(class_weights))
 
-# Adjust steps_per_epoch and validation_steps
+# Epoch Step Define
 steps_per_epoch = train_generator.samples // batch_size
 validation_steps = validation_generator.samples // batch_size
 
-# Create a TensorFlow dataset from the generators
+# Tensorflow Dataset Creation
+# Training
 train_dataset = tf.data.Dataset.from_generator(
     lambda: train_generator,
     output_signature=(tf.TensorSpec(shape=(None, img_height, img_width, 3), dtype=tf.float32),
                       tf.TensorSpec(shape=(None, train_generator.num_classes), dtype=tf.float32))
 ).repeat()
 
+# Validation
 validation_dataset = tf.data.Dataset.from_generator(
     lambda: validation_generator,
     output_signature=(tf.TensorSpec(shape=(None, img_height, img_width, 3), dtype=tf.float32),
                       tf.TensorSpec(shape=(None, validation_generator.num_classes), dtype=tf.float32))
 ).repeat()
 
-# Build the CNN Model
+# Build the Model & Architecture
 model = Sequential([
     Conv2D(32, (3, 3), activation='relu', input_shape=(img_height, img_width, 3)),
     MaxPooling2D((2, 2)),
@@ -84,14 +89,14 @@ model = Sequential([
     Dense(train_generator.num_classes, activation='softmax')
 ])
 
-# Compile the model
+# Model Compilation
 model.compile(optimizer=Adam(learning_rate=1e-4), loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Callbacks
 early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
-model_checkpoint = ModelCheckpoint('tf_checkpoint.keras', save_best_only=True, monitor='val_loss')
+model_checkpoint = ModelCheckpoint('vgg16_pretrained_checkpoint.keras', save_best_only=True, monitor='val_loss')
 
-# Train the model
+# Model Training
 history = model.fit(
     train_dataset,
     steps_per_epoch=steps_per_epoch,
@@ -102,9 +107,17 @@ history = model.fit(
     callbacks=[early_stopping, model_checkpoint]
 )
 
-# Evaluate the model
+# Model Evaluation
 loss, accuracy = model.evaluate(validation_generator)
 print(f'Validation accuracy: {accuracy * 100:.2f}%')
 
-# Save the model
-model.save('cnn_trained.h5')
+# Model Saving
+model.save('vgg16_pretrained.h5')
+
+
+# VGG16:
+# 1. Architecture: VGG16 is a deep neural network known for its simplicity, consisting of 16 layers including convolutional and fully connected layers.
+# 2. Layers: It uses a stack of convolutional layers followed by max-pooling layers to extract features, ending with three fully connected layers for classification.
+# 3. Performance: Effective for image classification tasks, VGG16 achieves good accuracy but requires a large number of parameters (138 million).
+# 4. Pre-training: Typically pre-trained on ImageNet, making it useful for transfer learning to tasks with similar data characteristics.
+# 5. Use Case: Suitable for tasks where high accuracy is crucial but computational resources are sufficient to handle its depth and parameter count.

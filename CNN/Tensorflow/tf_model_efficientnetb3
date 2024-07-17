@@ -11,12 +11,17 @@ from sklearn.utils.class_weight import compute_class_weight
 import matplotlib.pyplot as plt
 from PIL import Image
 
-data_dir = 'Datasets/Edited'
+# Old Dataset
+# data_dir = 'Datasets/Edited'
+# New Dataset
+data_dir = 'Dataset/Edited_Enhanced'
+
+# Image Parameters
 img_height, img_width = 300, 300
 batch_size = 32
 epochs = 100
 
-# Prepare Data
+# Image Data Preparations and Adaption 
 datagen = ImageDataGenerator(
     rescale=1./255,
     validation_split=0.2,
@@ -29,7 +34,7 @@ datagen = ImageDataGenerator(
     zoom_range=0.2
 )
 
-# Load training and validation data
+# Loading Training and Validation Data
 train_generator = datagen.flow_from_directory(
     data_dir,
     target_size=(img_height, img_width),
@@ -58,14 +63,14 @@ model = Sequential([
     Dense(train_generator.num_classes, activation='softmax')
 ])
 
-# Compiling the model
+# Model Compilation
 model.compile(optimizer=Adam(learning_rate=1e-4), loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Callbacks
 early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
 model_checkpoint = ModelCheckpoint('efficientnetb3_checkpoint.keras', save_best_only=True, monitor='val_loss')
 
-# Training the model with tf.data.Dataset for repetition
+# Model Training
 train_ds = tf.data.Dataset.from_generator(
     lambda: train_generator,
     output_types=(tf.float32, tf.float32),
@@ -88,14 +93,20 @@ history = model.fit(
     verbose=1
 )
 
-# Evaluating the model
+# Model Evaluation
 loss, accuracy = model.evaluate(validation_generator)
 print(f'Validation accuracy: {accuracy * 100:.2f}%')
 
-# Saving in .keras
+# Model Saving
 model.save('cnn_efficientnetb3.keras')
 
-# Output accuracy
+# Current Accuracy
 print(f'Current accuracy: {accuracy * 100:.2f}%')
 
-# Current ACC: 3,71%
+
+# EfficientNetB3:
+# 1. Architecture: EfficientNetB3 is a larger variant of EfficientNet, offering increased model depth, width, and input resolution compared to EfficientNetB0.
+# 2. Parameters: It has 12 million parameters, providing more capacity for learning complex features and achieving higher accuracy.
+# 3. Performance: Offers superior accuracy on image classification tasks compared to EfficientNetB0, suitable for applications demanding higher precision.
+# 4. Scalability: Maintains efficiency principles of the EfficientNet family but scales up to handle more demanding tasks with greater computational resources.
+# 5. Use Case: Useful for tasks where achieving the highest possible accuracy is critical and where the computational infrastructure can support its larger model size.

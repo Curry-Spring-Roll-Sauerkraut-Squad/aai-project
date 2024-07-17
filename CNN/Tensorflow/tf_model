@@ -8,35 +8,48 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.keras.optimizers import Adam
 from sklearn.utils.class_weight import compute_class_weight
 
+# Old Dataset
+# data_dir = 'Datasets/Edited'
 # New Dataset
-data_dir = 'Datasets/Edited'
+data_dir = 'Dataset/Edited_Enhanced'
 
+# Image Parameters
+# Dimensions to which image will be resized
 img_height, img_width = 150, 150
+# Number of images inside one batch for training
 batch_size = 32
+# Number of training epochs
+# -> Total pass of whole training dataset through the algorithm
 epochs = 50
 
-# Prepare Data
+# Image Data Preparations and Adaption 
 datagen = ImageDataGenerator(
     rescale=1./255,
     validation_split=0.2,
     horizontal_flip=True,
     vertical_flip=True,
-    rotation_range=20,  # Reduce rotation range
-    width_shift_range=0.1,  # Reduce shift range
+    rotation_range=20,
+    width_shift_range=0.1,
     height_shift_range=0.1,
     shear_range=0.1,
     zoom_range=0.1
 )
 
-# Load train and validation data
+# Loading Training and Validation Data
 train_generator = datagen.flow_from_directory(
+    # Loads training data from dir
     data_dir,
+    # Resize image to defined pixel size
     target_size=(img_height, img_width),
+    # Uses defined batch size
     batch_size=batch_size,
+    # Defines Categorical labels
     class_mode='categorical',
+    # Uses 80% for training
     subset='training'
 )
 
+# -> does the same thing but for validataion set
 validation_generator = datagen.flow_from_directory(
     data_dir,
     target_size=(img_height, img_width),
@@ -45,7 +58,7 @@ validation_generator = datagen.flow_from_directory(
     subset='validation'
 )
 
-# Compute class weights
+# Class Weight Computation
 class_weights = compute_class_weight(
     class_weight='balanced',
     classes=np.unique(train_generator.classes),
@@ -53,58 +66,85 @@ class_weights = compute_class_weight(
 )
 class_weights = dict(enumerate(class_weights))
 
-# Adjust steps_per_epoch and validation_steps
+# Epoch Step Define
+# Defines number of training samples
 steps_per_epoch = train_generator.samples // batch_size
+# Defines number of validation samples
 validation_steps = validation_generator.samples // batch_size
 
-# Create a TensorFlow dataset from the generators
+# Tensorflow Dataset Creation
+# Training
 train_dataset = tf.data.Dataset.from_generator(
+    # Lambda yields data from generator
     lambda: train_generator,
+    # Defines shae of data
     output_signature=(tf.TensorSpec(shape=(None, img_height, img_width, 3), dtype=tf.float32),
                       tf.TensorSpec(shape=(None, train_generator.num_classes), dtype=tf.float32))
+    # repeats dataset again if run out of data
 ).repeat()
 
+# Validation
+# -> does the same for validation set
 validation_dataset = tf.data.Dataset.from_generator(
     lambda: validation_generator,
     output_signature=(tf.TensorSpec(shape=(None, img_height, img_width, 3), dtype=tf.float32),
                       tf.TensorSpec(shape=(None, validation_generator.num_classes), dtype=tf.float32))
 ).repeat()
 
-# Build the CNN Model
+# Build the Model & Architecture
 model = Sequential([
+    # First Convolutional Layer with 32 filters, 3x3 Kernel Size a Relu Activation and input shape 150x150x3
     Conv2D(32, (3, 3), activation='relu', input_shape=(img_height, img_width, 3)),
+    # Max Pooling layer with 2x2 pool size
     MaxPooling2D((2, 2)),
     Conv2D(64, (3, 3), activation='relu'),
     MaxPooling2D((2, 2)),
     Conv2D(128, (3, 3), activation='relu'),
     MaxPooling2D((2, 2)),
+    # Flattens 3D output to 1D
     Flatten(),
-    Dense(256, activation='relu'),  # Reduce dense layer size
+    # Fully Connected Layer with Relu activation
+    Dense(256, activation='relu'),
+    # Dropout Layer to prevent overfitting with a rate of 50%
     Dropout(0.5),
+    # Output Layer with units equal to class number and softmax activation
     Dense(train_generator.num_classes, activation='softmax')
 ])
 
-# Compile the model
+# Model Compilation
+# Compiling of the model with Adam optimizer, categorical cross entropy loss function, tracks accuracy for performance
+# Used for multiclass classification [softmax + cross entropy]
 model.compile(optimizer=Adam(learning_rate=1e-4), loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Callbacks
+# Stops training if validataion loss does not improve for 10 epocs and uses best weights
 early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
-model_checkpoint = ModelCheckpoint('tf_checkpoint.keras', save_best_only=True, monitor='val_loss')
+# Saves models best weights during training (based on validation loss)
+model_checkpoint = ModelCheckpoint('cnn_non-pretrained_checkpoint.keras', save_best_only=True, monitor='val_loss')
 
-# Train the model
+# Model Training
 history = model.fit(
+    # Uses training dataset
     train_dataset,
+    # Uses defined steps per epoch for training
     steps_per_epoch=steps_per_epoch,
+    # Uses defined validation dataset 
     validation_data=validation_dataset,
+    # Number of steps per epoch for validation
     validation_steps=validation_steps,
+    # Total number of Epochs
     epochs=epochs,
+    # Uses class weight to handle class imbalance
     class_weight=class_weights,
+    # Uses defined callbacks 
     callbacks=[early_stopping, model_checkpoint]
 )
 
-# Evaluate the model
+# Model Evaluation
+# Uses Validation generator to estimate accuracy
 loss, accuracy = model.evaluate(validation_generator)
 print(f'Validation accuracy: {accuracy * 100:.2f}%')
 
-# Save the model
-model.save('cnn_trained.h5')
+# Model Saving
+# Saves trained model to file 
+model.save('cnn_non-pretrained.h5')

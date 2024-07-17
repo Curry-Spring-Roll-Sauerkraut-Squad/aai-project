@@ -11,13 +11,17 @@ from sklearn.utils.class_weight import compute_class_weight
 import matplotlib.pyplot as plt
 from PIL import Image
 
-#data_dir = 'Datasets/Edited'
+# Old Dataset
+# data_dir = 'Datasets/Edited'
+# New Dataset
 data_dir = 'Dataset/Edited_Enhanced'
+
+# Image Parameters
 img_height, img_width = 224, 224
 batch_size = 32
 epochs = 100
 
-# Prepare Data
+# Image Data Preparations and Adaption 
 datagen = ImageDataGenerator(
     rescale=1./255,
     validation_split=0.2,
@@ -30,7 +34,7 @@ datagen = ImageDataGenerator(
     zoom_range=0.2
 )
 
-# Load training and validation data
+# Loading Training and Validation Data
 train_generator = datagen.flow_from_directory(
     data_dir,
     target_size=(img_height, img_width),
@@ -59,14 +63,14 @@ model = Sequential([
     Dense(train_generator.num_classes, activation='softmax')
 ])
 
-# Compiling the model
+# Model Compilation
 model.compile(optimizer=Adam(learning_rate=1e-4), loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Callbacks
 early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
 model_checkpoint = ModelCheckpoint('efficientnetb0_checkpoint.keras', save_best_only=True, monitor='val_loss')
 
-# Training the model with tf.data.Dataset for repetition
+# Model Training
 train_ds = tf.data.Dataset.from_generator(
     lambda: train_generator,
     output_types=(tf.float32, tf.float32),
@@ -89,12 +93,20 @@ history = model.fit(
     verbose=1
 )
 
-# Evaluating the model
+# Model Evaluation
 loss, accuracy = model.evaluate(validation_generator)
 print(f'Validation accuracy: {accuracy * 100:.2f}%')
 
-# Saving in .keras
+# Model Saving
 model.save('cnn_efficientnetb0.keras')
 
-# Output accuracy
+# Current Accuracy
 print(f'Current accuracy: {accuracy * 100:.2f}%')
+
+
+# EfficientNetB0:
+# 1. Architecture: EfficientNetB0 is designed using a balanced scaling of model depth, width, and resolution, optimizing both performance and computational cost.
+# 2. Efficiency: It achieves competitive accuracy on image tasks while using fewer computational resources compared to older architectures.
+# 3. Parameters: With 5.3 million parameters, EfficientNetB0 is lighter and more efficient than traditional deep networks like VGG16.
+# 4. Performance: Well-suited for scenarios where computational resources are limited, such as deployment on mobile devices or edge computing environments.
+# 5. Use Case: Ideal for applications requiring efficient processing without sacrificing much on accuracy, such as mobile image recognition or real-time applications.

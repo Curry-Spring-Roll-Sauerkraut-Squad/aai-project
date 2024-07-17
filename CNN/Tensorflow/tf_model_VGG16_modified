@@ -11,12 +11,17 @@ from sklearn.utils.class_weight import compute_class_weight
 import matplotlib.pyplot as plt
 from PIL import Image
 
+# Old Dataset
+# data_dir = 'Datasets/Edited'
+# New Dataset
 data_dir = 'Dataset/Edited_Enhanced'
+
+# Image Parameters
 img_height, img_width = 150, 150
 batch_size = 16
 epochs = 100
 
-# Prepare Data
+# Image Data Preparations and Adaption 
 datagen = ImageDataGenerator(
     rescale=1./255,
     validation_split=0.2,
@@ -28,10 +33,11 @@ datagen = ImageDataGenerator(
     shear_range=0.2,
     zoom_range=0.2,
     brightness_range=[0.8, 1.2],
+    # Shifts RGB channels
     channel_shift_range=150.0
 )
 
-# Load training and validation data
+# Loading Training and Validation Data
 train_generator = datagen.flow_from_directory(
     data_dir,
     target_size=(img_height, img_width),
@@ -49,6 +55,7 @@ validation_generator = datagen.flow_from_directory(
 )
 
 # Display sample images and their labels from training data
+# Plots 9 images and labels from training data to visualize the data
 for images, labels in train_generator:
     for i in range(9):
         plt.subplot(330 + 1 + i)
@@ -57,16 +64,18 @@ for images, labels in train_generator:
     plt.show()
     break
 
-# Calculate class weights
+# Class Weight Computation
 classes = train_generator.classes
 class_weights = compute_class_weight(class_weight='balanced', classes=np.unique(classes), y=classes)
 class_weights = dict(enumerate(class_weights))
 
 # Pre-trained VGG16 Model
+# Loads Pretrained vgg16 without top classification using weights on imagenet
 base_model = VGG16(input_shape=(img_height, img_width, 3), include_top=False, weights='imagenet')
 base_model.trainable = True
 
-# Fine-tune the last few layers of the base model
+# Fine-tune last layers of base model
+# Freezes all layers in the base model except the last 4 
 for layer in base_model.layers[:-4]:
     layer.trainable = False
 
@@ -78,15 +87,17 @@ model = Sequential([
     Dense(46, activation='sigmoid')
 ])
 
-# Compiling the model
+# Model Compilation
 model.compile(optimizer=Adam(learning_rate=1e-4), loss='binary_crossentropy', metrics=['accuracy'])
 
 # Callbacks
 early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
 model_checkpoint = ModelCheckpoint('vgg16_checkpoint.keras', save_best_only=True, monitor='val_loss')
+# Reduces Learning rate by factor of 0.5 if validation does not improve for 5 epochs, with minimium 
 reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6)
 
-# Training the model with tf.data.Dataset for repetition
+# Model Training, with repeat
+# Generates TensorFlow datasets
 train_ds = tf.data.Dataset.from_generator(
     lambda: iter(train_generator),
     output_signature=(
@@ -113,14 +124,18 @@ history = model.fit(
     class_weight=class_weights
 )
 
-# Evaluating the model
+# Model Evaluation
 loss, accuracy = model.evaluate(val_ds, steps=validation_generator.samples // batch_size)
 print(f'Validation accuracy: {accuracy * 100:.2f}%')
 
-# Saving the model in native Keras format
+# Model Saving
 model.save('cnn_vgg16.keras')
 
+### For transparent Images, RGBA conversion
 # Additional changes and fixes
+# For handling transparent images
+# Iterates through all images in dataset
+# Converts images with 'P' to RGBA
 for root, dirs, files in os.walk(data_dir):
     for file in files:
         if file.endswith(('png', 'jpg', 'jpeg')):
@@ -130,5 +145,13 @@ for root, dirs, files in os.walk(data_dir):
                 img = img.convert('RGBA')
                 img.save(img_path)
 
-# Output the current accuracy
+# Current Accuracy
 print(f'Current accuracy: {accuracy * 100:.2f}%')
+
+
+# VGG16:
+# 1. Architecture: VGG16 is a deep neural network known for its simplicity, consisting of 16 layers including convolutional and fully connected layers.
+# 2. Layers: It uses a stack of convolutional layers followed by max-pooling layers to extract features, ending with three fully connected layers for classification.
+# 3. Performance: Effective for image classification tasks, VGG16 achieves good accuracy but requires a large number of parameters (138 million).
+# 4. Pre-training: Typically pre-trained on ImageNet, making it useful for transfer learning to tasks with similar data characteristics.
+# 5. Use Case: Suitable for tasks where high accuracy is crucial but computational resources are sufficient to handle its depth and parameter count.
