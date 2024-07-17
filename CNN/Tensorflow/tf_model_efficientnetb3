@@ -68,7 +68,7 @@ model.compile(optimizer=Adam(learning_rate=1e-4), loss='categorical_crossentropy
 
 # Callbacks
 early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
-model_checkpoint = ModelCheckpoint('efficientnetb3_checkpoint.keras', save_best_only=True, monitor='val_loss')
+model_checkpoint = ModelCheckpoint('efficientnetb3_pretrained_checkpoint.keras', save_best_only=True, monitor='val_loss')
 
 # Model Training
 train_ds = tf.data.Dataset.from_generator(
@@ -98,7 +98,7 @@ loss, accuracy = model.evaluate(validation_generator)
 print(f'Validation accuracy: {accuracy * 100:.2f}%')
 
 # Model Saving
-model.save('cnn_efficientnetb3.keras')
+model.save('efficientnetb3-pretrained.keras')
 
 # Current Accuracy
 print(f'Current accuracy: {accuracy * 100:.2f}%')

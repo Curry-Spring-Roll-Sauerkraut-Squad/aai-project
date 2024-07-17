@@ -92,7 +92,7 @@ model.compile(optimizer=Adam(learning_rate=1e-4), loss='binary_crossentropy', me
 
 # Callbacks
 early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
-model_checkpoint = ModelCheckpoint('vgg16_checkpoint.keras', save_best_only=True, monitor='val_loss')
+model_checkpoint = ModelCheckpoint('vgg16_pretrained_modified_checkpoint.keras', save_best_only=True, monitor='val_loss')
 # Reduces Learning rate by factor of 0.5 if validation does not improve for 5 epochs, with minimium 
 reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6)
 
@@ -129,7 +129,7 @@ loss, accuracy = model.evaluate(val_ds, steps=validation_generator.samples // ba
 print(f'Validation accuracy: {accuracy * 100:.2f}%')
 
 # Model Saving
-model.save('cnn_vgg16.keras')
+model.save('vgg16_pretrained_modified.keras')
 
 ### For transparent Images, RGBA conversion
 # Additional changes and fixes
