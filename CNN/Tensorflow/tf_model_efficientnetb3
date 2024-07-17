@@ -5,15 +5,14 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Flatten, Dense, Dropout
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-from tensorflow.keras.applications import EfficientNetB0
+from tensorflow.keras.applications import EfficientNetB3
 from tensorflow.keras.optimizers import Adam
 from sklearn.utils.class_weight import compute_class_weight
 import matplotlib.pyplot as plt
 from PIL import Image
 
-#data_dir = 'Datasets/Edited'
-data_dir = 'Dataset/Edited_Enhanced'
-img_height, img_width = 224, 224
+data_dir = 'Datasets/Edited'
+img_height, img_width = 300, 300
 batch_size = 32
 epochs = 100
 
@@ -47,8 +46,8 @@ validation_generator = datagen.flow_from_directory(
     subset='validation'
 )
 
-# Pre-trained EfficientNetB0 Model
-base_model = EfficientNetB0(input_shape=(img_height, img_width, 3), include_top=False, weights='imagenet')
+# Pre-trained EfficientNetB3 Model
+base_model = EfficientNetB3(input_shape=(img_height, img_width, 3), include_top=False, weights='imagenet')
 base_model.trainable = False
 
 model = Sequential([
@@ -64,7 +63,7 @@ model.compile(optimizer=Adam(learning_rate=1e-4), loss='categorical_crossentropy
 
 # Callbacks
 early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
-model_checkpoint = ModelCheckpoint('efficientnetb0_checkpoint.keras', save_best_only=True, monitor='val_loss')
+model_checkpoint = ModelCheckpoint('efficientnetb3_checkpoint.keras', save_best_only=True, monitor='val_loss')
 
 # Training the model with tf.data.Dataset for repetition
 train_ds = tf.data.Dataset.from_generator(
@@ -94,7 +93,9 @@ loss, accuracy = model.evaluate(validation_generator)
 print(f'Validation accuracy: {accuracy * 100:.2f}%')
 
 # Saving in .keras
-model.save('cnn_efficientnetb0.keras')
+model.save('cnn_efficientnetb3.keras')
 
 # Output accuracy
 print(f'Current accuracy: {accuracy * 100:.2f}%')
+
+# Current ACC: 3,71%

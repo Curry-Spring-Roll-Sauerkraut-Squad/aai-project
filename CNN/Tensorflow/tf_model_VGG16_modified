@@ -3,15 +3,15 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Flatten, Dense, Dropout
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from tensorflow.keras.layers import Flatten, Dense, Dropout, GlobalAveragePooling2D
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.optimizers import Adam
 from sklearn.utils.class_weight import compute_class_weight
 import matplotlib.pyplot as plt
 from PIL import Image
 
-data_dir = 'Datasets/Edited' 
+data_dir = 'Dataset/Edited_Enhanced'
 img_height, img_width = 150, 150
 batch_size = 16
 epochs = 100
@@ -19,14 +19,16 @@ epochs = 100
 # Prepare Data
 datagen = ImageDataGenerator(
     rescale=1./255,
-    validation_split=0.2,  
+    validation_split=0.2,
     horizontal_flip=True,
     vertical_flip=True,
-    rotation_range=30,
+    rotation_range=40,
     width_shift_range=0.2,
     height_shift_range=0.2,
     shear_range=0.2,
-    zoom_range=0.2
+    zoom_range=0.2,
+    brightness_range=[0.8, 1.2],
+    channel_shift_range=150.0
 )
 
 # Load training and validation data
@@ -62,34 +64,43 @@ class_weights = dict(enumerate(class_weights))
 
 # Pre-trained VGG16 Model
 base_model = VGG16(input_shape=(img_height, img_width, 3), include_top=False, weights='imagenet')
-base_model.trainable = False
+base_model.trainable = True
+
+# Fine-tune the last few layers of the base model
+for layer in base_model.layers[:-4]:
+    layer.trainable = False
 
 model = Sequential([
     base_model,
-    Flatten(),
+    GlobalAveragePooling2D(),
     Dense(512, activation='relu'),
     Dropout(0.5),
-    Dense(47, activation='sigmoid')
+    Dense(46, activation='sigmoid')
 ])
 
 # Compiling the model
 model.compile(optimizer=Adam(learning_rate=1e-4), loss='binary_crossentropy', metrics=['accuracy'])
 
 # Callbacks
-early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
+early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
 model_checkpoint = ModelCheckpoint('vgg16_checkpoint.keras', save_best_only=True, monitor='val_loss')
+reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=5, min_lr=1e-6)
 
 # Training the model with tf.data.Dataset for repetition
 train_ds = tf.data.Dataset.from_generator(
-    lambda: train_generator,
-    output_types=(tf.float32, tf.float32),
-    output_shapes=([None, img_height, img_width, 3], [None, 47])
+    lambda: iter(train_generator),
+    output_signature=(
+        tf.TensorSpec(shape=(None, img_height, img_width, 3), dtype=tf.float32),
+        tf.TensorSpec(shape=(None, train_generator.num_classes), dtype=tf.float32)
+    )
 ).repeat()
 
 val_ds = tf.data.Dataset.from_generator(
-    lambda: validation_generator,
-    output_types=(tf.float32, tf.float32),
-    output_shapes=([None, img_height, img_width, 3], [None, 47])
+    lambda: iter(validation_generator),
+    output_signature=(
+        tf.TensorSpec(shape=(None, img_height, img_width, 3), dtype=tf.float32),
+        tf.TensorSpec(shape=(None, validation_generator.num_classes), dtype=tf.float32)
+    )
 ).repeat()
 
 history = model.fit(
@@ -98,7 +109,7 @@ history = model.fit(
     validation_data=val_ds,
     validation_steps=validation_generator.samples // batch_size,
     epochs=epochs,
-    callbacks=[early_stopping, model_checkpoint],
+    callbacks=[early_stopping, model_checkpoint, reduce_lr],
     class_weight=class_weights
 )
 
@@ -121,5 +132,3 @@ for root, dirs, files in os.walk(data_dir):
 
 # Output the current accuracy
 print(f'Current accuracy: {accuracy * 100:.2f}%')
-
-# Current ACC: 60%

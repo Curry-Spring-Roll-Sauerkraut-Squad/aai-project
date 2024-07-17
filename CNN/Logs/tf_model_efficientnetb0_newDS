@@ -1,0 +1,44 @@
+PS C:\#Master\AI\YogaPoseDetection> & C:/ProgramData/anaconda3/python.exe c:/#Master/AI/YogaPoseDetection/CNN/Tensorflow/tf_model_efficientnetb0 
+2024-07-17 16:57:50.800132: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2024-07-17 16:57:51.845991: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+Found 3064 images belonging to 46 classes.
+Found 744 images belonging to 46 classes.
+2024-07-17 16:57:55.125077: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Epoch 1/100
+ 8/95 ━━━━━━━━━━━━━━━━━━━━ 1:37 1s/step - accuracy: 0.0640 - loss: 4.8171C:\ProgramData\anaconda3\Lib\site-packages\PIL\Image.py:981: UserWarning: Palette images with Transparency expressed in bytes should be converted to RGBA images
+  warnings.warn(
+95/95 ━━━━━━━━━━━━━━━━━━━━ 0s 1s/step - accuracy: 0.0534 - loss: 4.1817C:\ProgramData\anaconda3\Lib\site-packages\PIL\TiffImagePlugin.py:870: UserWarning: Corrupt EXIF data.  Expecting to read 4 bytes but only got 2.
+  warnings.warn(str(msg))
+95/95 ━━━━━━━━━━━━━━━━━━━━ 154s 2s/step - accuracy: 0.0535 - loss: 4.1792 - val_accuracy: 0.0802 - val_loss: 3.8075
+Epoch 2/100
+95/95 ━━━━━━━━━━━━━━━━━━━━ 125s 1s/step - accuracy: 0.0781 - loss: 3.8205 - val_accuracy: 0.0815 - val_loss: 3.7954
+Epoch 3/100
+95/95 ━━━━━━━━━━━━━━━━━━━━ 121s 1s/step - accuracy: 0.0783 - loss: 3.8189 - val_accuracy: 0.0787 - val_loss: 3.8038
+Epoch 4/100
+95/95 ━━━━━━━━━━━━━━━━━━━━ 119s 1s/step - accuracy: 0.0679 - loss: 3.8146 - val_accuracy: 0.0758 - val_loss: 3.7933
+Epoch 5/100
+95/95 ━━━━━━━━━━━━━━━━━━━━ 111s 1s/step - accuracy: 0.0739 - loss: 3.8074 - val_accuracy: 0.0787 - val_loss: 3.8225
+Epoch 6/100
+95/95 ━━━━━━━━━━━━━━━━━━━━ 112s 1s/step - accuracy: 0.0767 - loss: 3.8239 - val_accuracy: 0.0758 - val_loss: 3.8211
+Epoch 7/100
+95/95 ━━━━━━━━━━━━━━━━━━━━ 111s 1s/step - accuracy: 0.0847 - loss: 3.8204 - val_accuracy: 0.0899 - val_loss: 3.8187
+Epoch 8/100
+95/95 ━━━━━━━━━━━━━━━━━━━━ 112s 1s/step - accuracy: 0.0742 - loss: 3.8208 - val_accuracy: 0.0787 - val_loss: 3.8182
+Epoch 9/100
+95/95 ━━━━━━━━━━━━━━━━━━━━ 112s 1s/step - accuracy: 0.0795 - loss: 3.8173 - val_accuracy: 0.0716 - val_loss: 3.8171
+Epoch 10/100
+95/95 ━━━━━━━━━━━━━━━━━━━━ 113s 1s/step - accuracy: 0.0771 - loss: 3.8172 - val_accuracy: 0.0787 - val_loss: 3.8163
+Epoch 11/100
+95/95 ━━━━━━━━━━━━━━━━━━━━ 114s 1s/step - accuracy: 0.0756 - loss: 3.8155 - val_accuracy: 0.0758 - val_loss: 3.8140
+Epoch 12/100
+95/95 ━━━━━━━━━━━━━━━━━━━━ 112s 1s/step - accuracy: 0.0804 - loss: 3.8143 - val_accuracy: 0.0885 - val_loss: 3.8114
+Epoch 13/100
+95/95 ━━━━━━━━━━━━━━━━━━━━ 112s 1s/step - accuracy: 0.0763 - loss: 3.8122 - val_accuracy: 0.0758 - val_loss: 3.8114
+Epoch 14/100
+95/95 ━━━━━━━━━━━━━━━━━━━━ 112s 1s/step - accuracy: 0.0712 - loss: 3.8109 - val_accuracy: 0.0688 - val_loss: 3.8100
+C:\Users\lukas\AppData\Roaming\Python\Python311\site-packages\keras\src\trainers\data_adapters\py_dataset_adapter.py:121: UserWarning: Your `PyDataset` class should call `super().__init__(**kwargs)` in its constructor. `**kwargs` can include `workers`, `use_multiprocessing`, `max_queue_size`. Do not pass these arguments to `fit()`, as they will be ignored.
+  self._warn_if_super_not_called()
+24/24 ━━━━━━━━━━━━━━━━━━━━ 23s 951ms/step - accuracy: 0.0832 - loss: 3.7879
+Validation accuracy: 7.93%
+Current accuracy: 7.93%

@@ -5,22 +5,27 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from tensorflow.keras.optimizers import Adam
+from sklearn.utils.class_weight import compute_class_weight
 
-data_dir = 'Datasets/Edited' 
+# New Dataset
+data_dir = 'Datasets/Edited'
+
 img_height, img_width = 150, 150
-batch_size = 16
+batch_size = 32
+epochs = 50
 
 # Prepare Data
 datagen = ImageDataGenerator(
     rescale=1./255,
-    validation_split=0.2,  
+    validation_split=0.2,
     horizontal_flip=True,
     vertical_flip=True,
-    rotation_range=30,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
-    shear_range=0.2,
-    zoom_range=0.2
+    rotation_range=20,  # Reduce rotation range
+    width_shift_range=0.1,  # Reduce shift range
+    height_shift_range=0.1,
+    shear_range=0.1,
+    zoom_range=0.1
 )
 
 # Load train and validation data
@@ -28,7 +33,7 @@ train_generator = datagen.flow_from_directory(
     data_dir,
     target_size=(img_height, img_width),
     batch_size=batch_size,
-    class_mode='binary',
+    class_mode='categorical',
     subset='training'
 )
 
@@ -36,9 +41,34 @@ validation_generator = datagen.flow_from_directory(
     data_dir,
     target_size=(img_height, img_width),
     batch_size=batch_size,
-    class_mode='binary',
+    class_mode='categorical',
     subset='validation'
 )
+
+# Compute class weights
+class_weights = compute_class_weight(
+    class_weight='balanced',
+    classes=np.unique(train_generator.classes),
+    y=train_generator.classes
+)
+class_weights = dict(enumerate(class_weights))
+
+# Adjust steps_per_epoch and validation_steps
+steps_per_epoch = train_generator.samples // batch_size
+validation_steps = validation_generator.samples // batch_size
+
+# Create a TensorFlow dataset from the generators
+train_dataset = tf.data.Dataset.from_generator(
+    lambda: train_generator,
+    output_signature=(tf.TensorSpec(shape=(None, img_height, img_width, 3), dtype=tf.float32),
+                      tf.TensorSpec(shape=(None, train_generator.num_classes), dtype=tf.float32))
+).repeat()
+
+validation_dataset = tf.data.Dataset.from_generator(
+    lambda: validation_generator,
+    output_signature=(tf.TensorSpec(shape=(None, img_height, img_width, 3), dtype=tf.float32),
+                      tf.TensorSpec(shape=(None, validation_generator.num_classes), dtype=tf.float32))
+).repeat()
 
 # Build the CNN Model
 model = Sequential([
@@ -49,33 +79,32 @@ model = Sequential([
     Conv2D(128, (3, 3), activation='relu'),
     MaxPooling2D((2, 2)),
     Flatten(),
-    Dense(512, activation='relu'),
+    Dense(256, activation='relu'),  # Reduce dense layer size
     Dropout(0.5),
-    Dense(1, activation='sigmoid')
+    Dense(train_generator.num_classes, activation='softmax')
 ])
 
-# Compiling
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+# Compile the model
+model.compile(optimizer=Adam(learning_rate=1e-4), loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Callbacks
-early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
-model_checkpoint = ModelCheckpoint('tf_checkpoint.h5', save_best_only=True, monitor='val_loss')
+early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+model_checkpoint = ModelCheckpoint('tf_checkpoint.keras', save_best_only=True, monitor='val_loss')
 
-# Training
+# Train the model
 history = model.fit(
-    train_generator,
-    steps_per_epoch=train_generator.samples // batch_size,
-    validation_data=validation_generator,
-    validation_steps=validation_generator.samples // batch_size,
-    epochs=10,
+    train_dataset,
+    steps_per_epoch=steps_per_epoch,
+    validation_data=validation_dataset,
+    validation_steps=validation_steps,
+    epochs=epochs,
+    class_weight=class_weights,
     callbacks=[early_stopping, model_checkpoint]
 )
 
-# Evaluating
+# Evaluate the model
 loss, accuracy = model.evaluate(validation_generator)
 print(f'Validation accuracy: {accuracy * 100:.2f}%')
 
-# Saving
+# Save the model
 model.save('cnn_trained.h5')
-
-# CURRENT ACC: -
