@@ -8,7 +8,7 @@
 
 https://www.kaggle.com/datasets/tr1gg3rtrash/yoga-posture-dataset
 
-The dataset contains 2,700 + images classified into 47 categories.
+The dataset contains 2,700 + images classified into 46 categories.
 
 ### Cleaned Dataset
 
