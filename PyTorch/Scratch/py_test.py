@@ -116,7 +116,7 @@ class_names = dataset.classes
 
 model = load_model(model_path, num_classes=len(class_names))
 
-image_path = '../../Test/image1.jpg'
+image_path = '../../Test/image2.jpg'
 image_tensor = preprocess_image(image_path)
 predicted_class = predict_image(model, image_tensor, class_names)
 

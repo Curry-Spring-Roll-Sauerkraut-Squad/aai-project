@@ -34,10 +34,13 @@ dataset = ImageFolder(root=data_dir, transform=train_transform)
 # data splitting
 train_size = int(0.8 * len(dataset))
 test_size = len(dataset) - train_size
-train_dataset, test_dataset = random_split(dataset, [train_size, test_size])
+val_size = len(dataset) - train_size - test_size 
+train_dataset, val_dataset, test_dataset = random_split(dataset, [train_size, val_size, test_size])
+
 
 # data loaders
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
 # patch embedding class
@@ -219,6 +222,7 @@ best_model = None
 # training the model and logging the results
 with open(log_file_path, 'a') as log_file:
     for epoch in range(num_epochs):
+        summary(model, (3, 224, 224))
         train_loss, train_accuracy = train(model, train_loader, optimizer, criterion, device)
         val_loss, val_accuracy, val_precision, val_recall, val_f1 = validate(model, test_loader, criterion, device)
         

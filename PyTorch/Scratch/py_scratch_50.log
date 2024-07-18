@@ -1,0 +1,250 @@
+
+[2024-07-17 09:56:21] Epoch 1/50
+[2024-07-17 09:56:21] Train Loss: 3.8795, Train Accuracy: 5.69%
+[2024-07-17 09:56:21] Validation Loss: 3.7798, Validation Accuracy: 8.12%
+[2024-07-17 09:56:21] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 10:06:45] Epoch 2/50
+[2024-07-17 10:06:45] Train Loss: 3.7903, Train Accuracy: 7.05%
+[2024-07-17 10:06:45] Validation Loss: 3.7880, Validation Accuracy: 8.12%
+[2024-07-17 10:06:45] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 10:17:14] Epoch 3/50
+[2024-07-17 10:17:14] Train Loss: 3.7732, Train Accuracy: 6.89%
+[2024-07-17 10:17:14] Validation Loss: 3.8145, Validation Accuracy: 2.92%
+[2024-07-17 10:17:14] Validation Precision: 0.00, Recall: 0.03, F1-score: 0.00%
+
+[2024-07-17 10:27:46] Epoch 4/50
+[2024-07-17 10:27:46] Train Loss: 3.7723, Train Accuracy: 6.51%
+[2024-07-17 10:27:46] Validation Loss: 3.7916, Validation Accuracy: 4.95%
+[2024-07-17 10:27:46] Validation Precision: 0.00, Recall: 0.05, F1-score: 0.00%
+
+[2024-07-17 10:38:12] Epoch 5/50
+[2024-07-17 10:38:12] Train Loss: 3.7744, Train Accuracy: 6.32%
+[2024-07-17 10:38:12] Validation Loss: 3.7663, Validation Accuracy: 8.12%
+[2024-07-17 10:38:12] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 10:49:05] Epoch 6/50
+[2024-07-17 10:49:05] Train Loss: 3.7634, Train Accuracy: 7.31%
+[2024-07-17 10:49:05] Validation Loss: 3.7574, Validation Accuracy: 4.95%
+[2024-07-17 10:49:05] Validation Precision: 0.00, Recall: 0.05, F1-score: 0.00%
+
+[2024-07-17 10:59:57] Epoch 7/50
+[2024-07-17 10:59:57] Train Loss: 3.7701, Train Accuracy: 6.80%
+[2024-07-17 10:59:57] Validation Loss: 3.7586, Validation Accuracy: 8.12%
+[2024-07-17 10:59:57] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 11:10:43] Epoch 8/50
+[2024-07-17 11:10:43] Train Loss: 3.7656, Train Accuracy: 6.58%
+[2024-07-17 11:10:43] Validation Loss: 3.7620, Validation Accuracy: 8.12%
+[2024-07-17 11:10:43] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 11:21:34] Epoch 9/50
+[2024-07-17 11:21:34] Train Loss: 3.7613, Train Accuracy: 6.64%
+[2024-07-17 11:21:34] Validation Loss: 3.7354, Validation Accuracy: 8.12%
+[2024-07-17 11:21:34] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 11:32:01] Epoch 10/50
+[2024-07-17 11:32:01] Train Loss: 3.7592, Train Accuracy: 6.61%
+[2024-07-17 11:32:01] Validation Loss: 3.7382, Validation Accuracy: 8.12%
+[2024-07-17 11:32:01] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 11:42:44] Epoch 11/50
+[2024-07-17 11:42:44] Train Loss: 3.7482, Train Accuracy: 7.05%
+[2024-07-17 11:42:44] Validation Loss: 3.7502, Validation Accuracy: 4.95%
+[2024-07-17 11:42:44] Validation Precision: 0.00, Recall: 0.05, F1-score: 0.00%
+
+[2024-07-17 11:53:30] Epoch 12/50
+[2024-07-17 11:53:30] Train Loss: 3.7533, Train Accuracy: 6.19%
+[2024-07-17 11:53:30] Validation Loss: 3.7406, Validation Accuracy: 8.12%
+[2024-07-17 11:53:30] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 12:04:35] Epoch 13/50
+[2024-07-17 12:04:35] Train Loss: 3.7508, Train Accuracy: 6.93%
+[2024-07-17 12:04:35] Validation Loss: 3.7377, Validation Accuracy: 8.12%
+[2024-07-17 12:04:35] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 12:15:48] Epoch 14/50
+[2024-07-17 12:15:48] Train Loss: 3.7293, Train Accuracy: 7.43%
+[2024-07-17 12:15:48] Validation Loss: 3.7287, Validation Accuracy: 8.12%
+[2024-07-17 12:15:48] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 12:26:46] Epoch 15/50
+[2024-07-17 12:26:46] Train Loss: 3.7248, Train Accuracy: 7.47%
+[2024-07-17 12:26:46] Validation Loss: 3.7281, Validation Accuracy: 8.12%
+[2024-07-17 12:26:46] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 12:37:21] Epoch 16/50
+[2024-07-17 12:37:21] Train Loss: 3.7206, Train Accuracy: 7.47%
+[2024-07-17 12:37:21] Validation Loss: 3.7261, Validation Accuracy: 8.12%
+[2024-07-17 12:37:21] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 12:48:32] Epoch 17/50
+[2024-07-17 12:48:32] Train Loss: 3.7212, Train Accuracy: 7.18%
+[2024-07-17 12:48:32] Validation Loss: 3.7265, Validation Accuracy: 8.12%
+[2024-07-17 12:48:32] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 12:59:22] Epoch 18/50
+[2024-07-17 12:59:22] Train Loss: 3.7217, Train Accuracy: 7.43%
+[2024-07-17 12:59:22] Validation Loss: 3.7267, Validation Accuracy: 8.12%
+[2024-07-17 12:59:22] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 13:10:09] Epoch 19/50
+[2024-07-17 13:10:09] Train Loss: 3.7203, Train Accuracy: 7.40%
+[2024-07-17 13:10:09] Validation Loss: 3.7274, Validation Accuracy: 8.12%
+[2024-07-17 13:10:09] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 13:21:19] Epoch 20/50
+[2024-07-17 13:21:19] Train Loss: 3.7208, Train Accuracy: 7.37%
+[2024-07-17 13:21:19] Validation Loss: 3.7279, Validation Accuracy: 8.12%
+[2024-07-17 13:21:19] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 13:32:15] Epoch 21/50
+[2024-07-17 13:32:15] Train Loss: 3.7164, Train Accuracy: 7.40%
+[2024-07-17 13:32:15] Validation Loss: 3.7279, Validation Accuracy: 8.12%
+[2024-07-17 13:32:15] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 13:43:38] Epoch 22/50
+[2024-07-17 13:43:38] Train Loss: 3.7170, Train Accuracy: 7.43%
+[2024-07-17 13:43:38] Validation Loss: 3.7281, Validation Accuracy: 8.12%
+[2024-07-17 13:43:38] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 13:54:43] Epoch 23/50
+[2024-07-17 13:54:43] Train Loss: 3.7153, Train Accuracy: 7.47%
+[2024-07-17 13:54:43] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 13:54:43] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 14:05:42] Epoch 24/50
+[2024-07-17 14:05:42] Train Loss: 3.7171, Train Accuracy: 7.37%
+[2024-07-17 14:05:42] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 14:05:42] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 14:16:44] Epoch 25/50
+[2024-07-17 14:16:44] Train Loss: 3.7165, Train Accuracy: 7.43%
+[2024-07-17 14:16:44] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 14:16:44] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 14:27:39] Epoch 26/50
+[2024-07-17 14:27:39] Train Loss: 3.7160, Train Accuracy: 7.43%
+[2024-07-17 14:27:39] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 14:27:39] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 14:39:00] Epoch 27/50
+[2024-07-17 14:39:00] Train Loss: 3.7182, Train Accuracy: 7.50%
+[2024-07-17 14:39:00] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 14:39:00] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 14:49:58] Epoch 28/50
+[2024-07-17 14:49:58] Train Loss: 3.7179, Train Accuracy: 7.43%
+[2024-07-17 14:49:58] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 14:49:58] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 15:00:56] Epoch 29/50
+[2024-07-17 15:00:56] Train Loss: 3.7182, Train Accuracy: 7.43%
+[2024-07-17 15:00:56] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 15:00:56] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 15:11:51] Epoch 30/50
+[2024-07-17 15:11:51] Train Loss: 3.7172, Train Accuracy: 7.47%
+[2024-07-17 15:11:51] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 15:11:51] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 15:22:50] Epoch 31/50
+[2024-07-17 15:22:50] Train Loss: 3.7163, Train Accuracy: 7.43%
+[2024-07-17 15:22:50] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 15:22:50] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 15:33:50] Epoch 32/50
+[2024-07-17 15:33:50] Train Loss: 3.7151, Train Accuracy: 7.43%
+[2024-07-17 15:33:50] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 15:33:50] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 15:44:49] Epoch 33/50
+[2024-07-17 15:44:49] Train Loss: 3.7175, Train Accuracy: 7.43%
+[2024-07-17 15:44:49] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 15:44:49] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 15:55:48] Epoch 34/50
+[2024-07-17 15:55:48] Train Loss: 3.7152, Train Accuracy: 7.43%
+[2024-07-17 15:55:48] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 15:55:48] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 16:06:45] Epoch 35/50
+[2024-07-17 16:06:45] Train Loss: 3.7148, Train Accuracy: 7.43%
+[2024-07-17 16:06:45] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 16:06:45] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 16:17:48] Epoch 36/50
+[2024-07-17 16:17:48] Train Loss: 3.7177, Train Accuracy: 7.47%
+[2024-07-17 16:17:48] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 16:17:48] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 16:28:51] Epoch 37/50
+[2024-07-17 16:28:51] Train Loss: 3.7169, Train Accuracy: 7.43%
+[2024-07-17 16:28:51] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 16:28:51] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 16:40:01] Epoch 38/50
+[2024-07-17 16:40:01] Train Loss: 3.7175, Train Accuracy: 7.43%
+[2024-07-17 16:40:01] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 16:40:01] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 16:51:11] Epoch 39/50
+[2024-07-17 16:51:11] Train Loss: 3.7143, Train Accuracy: 7.43%
+[2024-07-17 16:51:11] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 16:51:11] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 17:02:12] Epoch 40/50
+[2024-07-17 17:02:12] Train Loss: 3.7168, Train Accuracy: 7.43%
+[2024-07-17 17:02:12] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 17:02:12] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 17:13:14] Epoch 41/50
+[2024-07-17 17:13:14] Train Loss: 3.7160, Train Accuracy: 7.47%
+[2024-07-17 17:13:14] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 17:13:14] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 17:24:17] Epoch 42/50
+[2024-07-17 17:24:17] Train Loss: 3.7157, Train Accuracy: 7.43%
+[2024-07-17 17:24:17] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 17:24:17] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 17:35:17] Epoch 43/50
+[2024-07-17 17:35:17] Train Loss: 3.7180, Train Accuracy: 7.43%
+[2024-07-17 17:35:17] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 17:35:17] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 17:46:24] Epoch 44/50
+[2024-07-17 17:46:24] Train Loss: 3.7159, Train Accuracy: 7.40%
+[2024-07-17 17:46:24] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 17:46:24] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 17:57:33] Epoch 45/50
+[2024-07-17 17:57:33] Train Loss: 3.7152, Train Accuracy: 7.43%
+[2024-07-17 17:57:33] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 17:57:33] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 18:08:47] Epoch 46/50
+[2024-07-17 18:08:47] Train Loss: 3.7171, Train Accuracy: 7.40%
+[2024-07-17 18:08:47] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 18:08:47] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 18:19:52] Epoch 47/50
+[2024-07-17 18:19:52] Train Loss: 3.7177, Train Accuracy: 7.43%
+[2024-07-17 18:19:52] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 18:19:52] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 18:30:53] Epoch 48/50
+[2024-07-17 18:30:53] Train Loss: 3.7156, Train Accuracy: 7.47%
+[2024-07-17 18:30:53] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 18:30:53] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 18:43:38] Epoch 49/50
+[2024-07-17 18:43:38] Train Loss: 3.7157, Train Accuracy: 7.40%
+[2024-07-17 18:43:38] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 18:43:38] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
+
+[2024-07-17 18:57:02] Epoch 50/50
+[2024-07-17 18:57:02] Train Loss: 3.7163, Train Accuracy: 7.40%
+[2024-07-17 18:57:02] Validation Loss: 3.7282, Validation Accuracy: 8.12%
+[2024-07-17 18:57:02] Validation Precision: 0.01, Recall: 0.08, F1-score: 0.01%
